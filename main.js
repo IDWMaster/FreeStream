@@ -32,7 +32,7 @@ db.onDbReady(function(){
                 var ibuffy = new Buffer(0);
                 process.stdin.on('end',function(){
                     var nkey = new NodeRSA();
-                    nkey.importKey(ibuffy);
+                    nkey.importKey(ibuffy,'pkcs8-der');
                     if(!nkey.isPublic(true)) {
                         throw 'Tell whoever sent this to discard their key. They sent their private key instead of public......';
                     }
