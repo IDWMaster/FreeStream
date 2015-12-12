@@ -1,0 +1,30 @@
+{
+  "name": "freestream",
+  "version": "0.0.1",
+  "description": "A faster, encrypted version of nc.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IDWMaster/FreeStream.git"
+  },
+  "keywords": [
+    "encryption",
+    "networking",
+    "nc"
+  ],
+  "author": "Brian Bosak <brielcccc@gmail.com> (https://github.com/IDWMaster)",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/IDWMaster/FreeStream/issues"
+  },
+  "homepage": "https://github.com/IDWMaster/FreeStream#readme",
+  "dependencies": {
+    "freespeech-cryptography": "^1.0.0",
+    "freespeech-database": "^1.0.4",
+    "freespeech-session": "^1.0.5",
+    "node-rsa": "^0.2.26"
+  }
+}
