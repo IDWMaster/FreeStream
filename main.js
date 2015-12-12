@@ -21,18 +21,19 @@ db.onDbReady(function(){
     EncryptionKeys.getDefaultKey(function(key){
         if(!key) {
             key = crypto.generateRSAKey(4096);
-            EncryptionKeys.add(key,function(){},true);
+            EncryptionKeys.add(key,function(){
+                
+            },true);
         }
         switch(args[2]) {
             case 'EXPORT':
                 process.stdout.write(key.exportKey('pkcs8-public-der'));
-                process.exit(0);
                 break;
             case 'IMPORT':
                 var ibuffy = new Buffer(0);
                 process.stdin.on('end',function(){
                     var nkey = new NodeRSA();
-                    nkey.importKey(ibuffy,'pkcs8-der');
+                    nkey.importKey(ibuffy,'pkcs8-public-der');
                     if(!nkey.isPublic(true)) {
                         throw 'Tell whoever sent this to discard their key. They sent their private key instead of public......';
                     }
@@ -41,7 +42,6 @@ db.onDbReady(function(){
                             throw 'Failed to add key to database.';
                         }
                         console.log('Imported key with thumbprint: '+nkey.thumbprint());
-                        process.exit(0);
                     });
                 });
                 process.stdin.on('data',function(blob){
