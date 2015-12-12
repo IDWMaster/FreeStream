@@ -37,7 +37,7 @@ db.onDbReady(function(){
                     if(!nkey.isPublic(true)) {
                         throw 'Tell whoever sent this to discard their key. They sent their private key instead of public......';
                     }
-                    db.add(nkey,function(success){
+                    EncryptionKeys.add(nkey,function(success){
                         if(!success) {
                             throw 'Failed to add key to database.';
                         }
