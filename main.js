@@ -1,4 +1,11 @@
 var NodeRSA = require('node-rsa');
+
+NodeRSA.prototype.thumbprint = function () {
+    var pubbin = this.exportKey('pkcs8-public-der');
+    var hash = crypto.createHash('sha256');
+    hash.update(pubbin);
+    return hash.digest('hex');
+};
 var Session = require('freespeech-session').Session;
 var CleartextServer = require('freespeech-session').CleartextServer;
 var crypto = require('freespeech-cryptography');
