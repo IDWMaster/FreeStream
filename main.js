@@ -1,17 +1,10 @@
-var NodeRSA = require('node-rsa');
-
-NodeRSA.prototype.thumbprint = function () {
-    var pubbin = this.exportKey('pkcs8-public-der');
-    var hash = crypto.createHash('sha256');
-    hash.update(pubbin);
-    return hash.digest('hex');
-};
 var Session = require('freespeech-session').Session;
 var CleartextServer = require('freespeech-session').CleartextServer;
 var crypto = require('freespeech-cryptography');
 var fs = require('fs');
 var db = require('freespeech-database');
 var args = process.argv;
+var NodeRSA = crypto.NodeRSA;
 if(args.length == 2) {
 console.log('USAGE information:\nnode main.js MODE modeArgs');
 console.log('MODE can be SERVER, CLIENT, IMPORT, EXPORT, or THUMBPRINT');
@@ -23,18 +16,11 @@ console.log('node main.js CLIENT ipaddr portno thumbprint\nwhere ipaddr is the I
 process.exit(0);
 }
 
-db.onDbReady(function(){
-    var EncryptionKeys = db.EncryptionKeys;
-    EncryptionKeys.getDefaultKey(function(key){
-        if(!key) {
-            key = crypto.generateRSAKey(4096);
-            EncryptionKeys.add(key,function(){
-                
-            },true);
-        }
-        switch(args[2]) {
+var startSystem = function(key) {
+     switch(args[2]) {
             case 'EXPORT':
                 process.stdout.write(key.exportKey('pkcs8-public-der'));
+                process.exit(0);
                 break;
             case 'IMPORT':
                 var ibuffy = new Buffer(0);
@@ -49,6 +35,7 @@ db.onDbReady(function(){
                             throw 'Failed to add key to database.';
                         }
                         console.log('Imported key with thumbprint: '+nkey.thumbprint());
+                        process.exit(0);
                     });
                 });
                 process.stdin.on('data',function(blob){
@@ -82,5 +69,20 @@ db.onDbReady(function(){
                 });
                 break;
         }
+}
+
+
+db.onDbReady(function(){
+    var EncryptionKeys = db.EncryptionKeys;
+    EncryptionKeys.getDefaultKey(function(key){
+        if(!key) {
+            console.error('Key not found. Generating');
+            key = crypto.generateRSAKey(4096);
+            console.error('Key generated. Adding to database.');
+            EncryptionKeys.add(key,function(){
+                console.error('Key added to database');
+            },true);
+        }
+       
     });
 });
