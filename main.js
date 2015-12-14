@@ -79,8 +79,12 @@ db.onDbReady(function(){
             console.error('Key not found. Generating');
             key = crypto.generateRSAKey(4096);
             console.error('Key generated. Adding to database.');
-            EncryptionKeys.add(key,function(){
-                console.error('Key added to database');
+            EncryptionKeys.add(key,function(success){
+                if(success) {
+                    console.error('Key added to database');
+                }else {
+                    console.error('Failure');
+                }
             },true);
         }
        
