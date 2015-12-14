@@ -16,6 +16,7 @@ console.log('node main.js CLIENT ipaddr portno thumbprint\nwhere ipaddr is the I
 process.exit(0);
 }
 
+    var EncryptionKeys;
 var startSystem = function(key) {
      switch(args[2]) {
             case 'EXPORT':
@@ -47,7 +48,7 @@ var startSystem = function(key) {
                 new CleartextServer(function(port){
                     console.error('Listening on port '+port);
                 },function(csession){
-                    crypt.negotiateServerConnection(csession,key,function(session){
+                    crypto.negotiateServerConnection(csession,key,function(session){
                         //Start sending from stdin
                         var stream = session.asStream();
                         process.stdin.pipe(stream.write);
@@ -60,6 +61,7 @@ var startSystem = function(key) {
                 var server = new CleartextServer(function(port){},function(){});
                 var client = server.connect(args[3],args[4]);
                 EncryptionKeys.findKey(args[5],function(key){
+                  
                     crypto.connectToEndpoint(client,key,function(session){
                         var stream = session.asStream();
                         stream.read.pipe(process.stdout);
@@ -68,12 +70,24 @@ var startSystem = function(key) {
                     });
                 });
                 break;
+            case 'THUMBPRINT':
+                var buffer = new Buffer(0);
+                process.stdin.on('data',function(blob){
+                    buffer = Buffer.concat([buffer,blob],blob.length+buffer.length);
+                });
+                process.stdin.on('end',function(){
+                    var key = new NodeRSA();
+                    key.importKey(buffer,'pkcs8-public-der');
+                    console.log(key.thumbprint());
+                    process.exit(0);
+                });
+                break;
         }
 }
 
 
 db.onDbReady(function(){
-    var EncryptionKeys = db.EncryptionKeys;
+    EncryptionKeys = db.EncryptionKeys;
     EncryptionKeys.getDefaultKey(function(key){
         if(!key) {
             console.error('Key not found. Generating');
@@ -81,11 +95,14 @@ db.onDbReady(function(){
             console.error('Key generated. Adding to database.');
             EncryptionKeys.add(key,function(success){
                 if(success) {
+                    startSystem(key);
                     console.error('Key added to database');
                 }else {
                     console.error('Failure');
                 }
             },true);
+        }else {
+            startSystem(key);
         }
        
     });
