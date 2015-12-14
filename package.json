@@ -24,7 +24,7 @@
   "dependencies": {
     "freespeech-cryptography": "^1.0.3",
     "freespeech-database": "^1.1.2",
-    "freespeech-session": "^1.0.9",
+    "freespeech-session": "^1.1.0",
     "node-rsa": "^0.2.26"
   }
 }
