@@ -91,6 +91,7 @@ var startSystem = function(key) {
 db.onDbReady(function(){
     EncryptionKeys = db.EncryptionKeys;
     EncryptionKeys.getDefaultKey(function(key){
+        console.log('Got default key.');
         if(!key) {
             console.error('Key not found. Generating');
             key = crypto.generateRSAKey(4096);
