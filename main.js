@@ -60,6 +60,7 @@ var startSystem = function(key) {
             case 'CLIENT':
                 var server = new CleartextServer(function(port){},function(){});
                 var client = server.connect(args[3],args[4]);
+                console.error('Connecting....');
                 EncryptionKeys.findKey(args[5],function(key){
                   console.error('Found key. Connecting to endpoint.');
                     crypto.connectToEndpoint(client,key,function(session){
