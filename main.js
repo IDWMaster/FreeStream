@@ -61,8 +61,9 @@ var startSystem = function(key) {
                 var server = new CleartextServer(function(port){},function(){});
                 var client = server.connect(args[3],args[4]);
                 EncryptionKeys.findKey(args[5],function(key){
-                  
+                  console.error('Found key. Connecting to endpoint.');
                     crypto.connectToEndpoint(client,key,function(session){
+                        console.error('Connected to endpoint');
                         var stream = session.asStream();
                         stream.read.pipe(process.stdout);
                         process.stdin.pipe(stream.write);
