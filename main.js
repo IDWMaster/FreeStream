@@ -88,7 +88,13 @@ var startSystem = function(key) {
 }
 
 
+//onDbReady is being called more than once for some reason.....
+var alreadyCalled = false;
 db.onDbReady(function(){
+    if(alreadyCalled) {
+        return;
+    }
+    alreadyCalled = true;
     console.error('Database engine ready');
     EncryptionKeys = db.EncryptionKeys;
     EncryptionKeys.getDefaultKey(function(key){
