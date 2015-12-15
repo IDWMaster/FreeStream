@@ -89,6 +89,7 @@ var startSystem = function(key) {
 
 
 db.onDbReady(function(){
+    console.log('Database engine ready');
     EncryptionKeys = db.EncryptionKeys;
     EncryptionKeys.getDefaultKey(function(key){
         console.error('Got default key.');
