@@ -18,6 +18,7 @@ process.exit(0);
 }
 
 var ThresholdStream = function(innerStream, threshold) {
+    return innerStream;
     var retval = new Stream.Writable();
     
     retval._write = function(data,encoding,callback) {
