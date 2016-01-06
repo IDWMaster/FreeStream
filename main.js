@@ -111,8 +111,7 @@ var startSystem = function(key) {
                     buffer = Buffer.concat([buffer,blob],blob.length+buffer.length);
                 });
                 process.stdin.on('end',function(){
-                    var key = new NodeRSA();
-                    key.importKey(buffer,'pkcs8-public-der');
+                    var key = crypto.importKey(buffer);
                     console.log(key.thumbprint());
                     process.exit(0);
                 });
