@@ -22,9 +22,9 @@
   },
   "homepage": "https://github.com/IDWMaster/FreeStream#readme",
   "dependencies": {
-    "freespeech-cryptography": "^1.0.9",
+    "freespeech-cryptography": "^1.1.1",
     "freespeech-database": "^1.1.4",
-    "freespeech-session": "^1.1.1",
+    "freespeech-session": "^1.1.2",
     "node-rsa": "^0.2.26"
   }
 }

@@ -97,10 +97,14 @@ var startSystem = function(key) {
                 EncryptionKeys.findKey(args[5],function(key){
                   console.error('Found key. Connecting to endpoint.');
                     crypto.connectToEndpoint(client,key,function(session){
+                        if(session) {
                         console.error('Connected to endpoint');
                         var stream = session.asStream();
                         stream.read.pipe(process.stdout);
                         process.stdin.pipe(ThresholdStream(stream.write,1024*25));
+                    }else {
+                        throw 'Error during connection attempt.';
+                    }
                         
                     });
                 });
