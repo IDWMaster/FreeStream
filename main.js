@@ -80,14 +80,17 @@ var startSystem = function (key) {
             new CleartextServer(function (port) {
                 console.error('Listening on port ' + port);
             }, function (csession) {
-                crypto.negotiateServerConnection(csession, key, function (session) {
-                    //Start sending from stdin
-                    var stream = session.asStream();
+                csession.computeMTU(10000, function () {
+                    crypto.negotiateServerConnection(csession, key, function (session) {
+                        //Start sending from stdin
+                        var stream = session.asStream();
 
-                    process.stdin.pipe(ThresholdStream(stream.write, 1024 * 25));
-                    //Start piping to stdout
-                    stream.read.pipe(process.stdout);
+                        process.stdin.pipe(ThresholdStream(stream.write, 1024 * 25));
+                        //Start piping to stdout
+                        stream.read.pipe(process.stdout);
+                    });
                 });
+
             }, portno);
             break;
         case 'CLIENT':
